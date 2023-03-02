@@ -86,6 +86,9 @@ contract UniswapWormholeMessageReceiver {
         // Check that the target, data, and values arrays are the same length.
         require(targets.length == datas.length && targets.length == values.length, 'Inconsistent argument lengths');
 
+        // Provide an error if a message was accidentally submitted with no function calls.
+        require(targets.length != 0, 'No functions to call');
+
         // Execute all of the function calls in a message.
         for (uint256 i = 0; i < targets.length; i++) {
             (bool success, ) = targets[i].call{value: values[i]}(datas[i]);
