@@ -57,10 +57,11 @@ contract UniswapWormholeMessageReceiver {
 
 
     /**
-     * @param _whMessage Wormhole message relayed from a remote chain.
+     * @param _whMessages Wormhole messages relayed from a source chain.
      */
-    function receiveMessage(bytes memory _whMessage) public {
-        (Structs.VM memory vm, bool valid, string memory reason) = wormhole.parseAndVerifyVM(_whMessage);
+    function receiveMessage(bytes[] memory _whMessages) public {
+        require(_whMessages.length == 1, "Only one message at a time please");
+        (Structs.VM memory vm, bool valid, string memory reason) = wormhole.parseAndVerifyVM(_whMessages[0]);
 
         //validate
         require(valid, reason);
